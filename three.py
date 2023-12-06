@@ -13,8 +13,9 @@ for ind, line in enumerate(lines):
 
 def check_for_chars(x1, x2, y1, y2):
     flag = False
-    for ind1, ind2 in [range(x1, x2), range(y1, y2)]:
-        print(ind1, ind2)
+    for ind1 in range(x1, x2 + 1):
+        for ind2 in range(y1, y2 + 1):
+            print(ind1, ind2)
     return flag
 
 
