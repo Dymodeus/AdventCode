@@ -75,5 +75,3 @@ def task2():
 if __name__ == "__main__":
     print(f"The answer to task 1 is:\n {task1()}\n")
     print(f"The answer to task 2 is:\n {task2()}")
-
-
