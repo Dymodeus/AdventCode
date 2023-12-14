@@ -30,9 +30,17 @@ def task1():
 
 
 def task2():
+    locations = []
+    seed_start = [int(seed_list[2*ind]) for ind in range(int(len(seed_list)/2))]
+    seed_range = [int(seed_list[2*ind + 1]) for ind in range(int(len(seed_list)/2))]
+    for ind, seed_starts in enumerate(seed_start):
+        print(f"Starting seed number {ind + 1}")
+        for seed in range(seed_starts, seed_starts + seed_range[ind]):
+            locations.append(get_location(seed))
 
+    print(f"The lowest location number is {min(locations)}")
 
 
 if __name__ == "__main__":
-    task1()
-
+    # task1()
+    task2()
