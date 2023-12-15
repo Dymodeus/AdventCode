@@ -1,12 +1,27 @@
+import sys
+
 from config import input_path
 import os
 
 
 with open(os.path.join(input_path, 'input5.txt'), 'r') as file:
     lines = file.readlines()
+    lines = [line.strip() for line in lines]
     # print(lines[1:])
 
-seed_list = lines[0].split(":")[1].split()
+seed_list = lines[0].split(": ")[1].split()
+
+maps = {}
+temp = []
+for x in lines[2:]:
+    if x:
+        temp.append(x)
+        continue
+    maps[temp[0].split(' ')[0]] = [values.split(' ') for values in temp[1:]]
+    temp.clear()
+maps[temp[0].split(' ')[0]] = [values.split(' ') for values in temp[1:]]
+
+seeds = [[int(seed_list[seed]), int(seed_list[seed]) + int(seed_list[seed+1])] for seed in range(0, len(seed_list), 2)]
 
 
 def get_location(seed):
