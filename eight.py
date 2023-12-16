@@ -1,5 +1,9 @@
 from config import input_path
+import time
+import math
 import os
+
+start_time = time.time()
 
 with open(os.path.join(input_path, "input8.txt"), "r") as file:
     lines = [line.strip() for line in file.readlines()]
@@ -18,8 +22,23 @@ def task1():
         instruction = instructions[steps % num_of_instructions]
         location = maps[location][step_map[instruction]]
         steps += 1
-    print(steps)
+    print(f"The answer to part one is {steps}\n")
+
+
+def task2():
+    locations = [x for x in maps.keys() if x.endswith("A")]
+    steps = []
+    for location in locations:
+        steps.append(0)
+        while not location.endswith("Z"):
+            instruction = instructions[steps[-1] % num_of_instructions]
+            location = maps[location][step_map[instruction]]
+            steps[-1] += 1
+
+    print(f"The answer to part two is {math.lcm(*steps)}\n")
 
 
 if __name__ == "__main__":
     task1()
+    task2()
+    print(f"Total runtime: {time.time() - start_time} seconds.")
