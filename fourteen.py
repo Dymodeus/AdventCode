@@ -44,5 +44,27 @@ def task1():
     print(f"The answer to part one is {total_sum}\n")
 
 
+def one_cycle(array):
+    o_locations = np.argwhere(array == "O")
+    for location in o_locations:
+        row, col = location
+        while True:
+            if row == 0:
+                break
+            if array[row - 1, col] != ".":
+                break
+            row -= 1
+        # print(f"Changing from {location} to {[row, col]}\n")
+        array[location[0], location[1]] = "."
+        array[row, col] = "O"
+    return array
+
+
+def task2():
+
+    print("")
+
+
 if __name__ == "__main__":
-    task1()
+    # task1()
+    task2()
