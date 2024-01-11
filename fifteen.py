@@ -27,34 +27,38 @@ def task2():
     list_of_boxes = []
     for i in range(256):
         list_of_boxes.append([])
-    for step in test_line:
+    for step in line:
         # print(list_of_boxes)
         if "=" in step:
             label = step.split("=")[0]
             box_nr = hashing(label)
-            print(box_nr)
+            # print(box_nr)
             replaced = False
+            step = step.replace("=", " ")
             for ind, content in enumerate(list_of_boxes[box_nr]):
                 if label in content:
-                    list_of_boxes[box_nr][ind] = step.replace("=", " ")
+                    list_of_boxes[box_nr][ind] = step
                     replaced = True
             if not replaced:
                 list_of_boxes[box_nr].append(step.replace("=", " "))
         elif "-" in step:
             label = step[:-1]
             box_nr = hashing(label)
+            # print(box_nr)
             for ind, content in enumerate(list_of_boxes[box_nr]):
-                if label in content:
+                if content.split()[0] == label:
                     list_of_boxes[box_nr].pop(ind)
         else:
             break
-    print(list_of_boxes)
+        # print(list_of_boxes[box_nr])
+    # print(list_of_boxes)
     sum_of_focus = 0
     for ind_box, box in enumerate(list_of_boxes, 1):
         for slot, lens in enumerate(box, 1):
             power = ind_box * slot * int(lens.split()[1])
             sum_of_focus += power
-    print(f"The answer to part two is {sum_of_focus}\n")
+            # print(power)
+    print(f"The answer to part two is {sum_of_focus}\n")    # 232727 is too low
 
 
 if __name__ == "__main__":
