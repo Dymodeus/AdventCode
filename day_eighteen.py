@@ -3,16 +3,21 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 
-test = False
-if test:
-    lines = [line.rstrip().split() for line in open(os.path.join(input_path, "test_input18.txt"))]
-else:
-    lines = [line.rstrip().split() for line in open(os.path.join(input_path, "input18.txt"))]
+
+# test = True
+def get_input(test: bool):
+    if test:
+        lines = [line.rstrip().split() for line in open(os.path.join(input_path, "test_input18.txt"))]
+    else:
+        lines = [line.rstrip().split() for line in open(os.path.join(input_path, "input18.txt"))]
+    return lines
 # print(lines)
+
+
 directions = {"R": np.array([0, 1]), "L": np.array([0, -1]), "D": np.array([1, 0]), "U": np.array([-1, 0])}
 
 
-def create_grid():
+def create_grid(lines: list, include_grid=False):
     current_row, current_col = 0, 0
     coords = np.empty((len(lines) + 1, 2), dtype=int)
     coords[0, :] = np.array([0, 0])
@@ -22,34 +27,37 @@ def create_grid():
         coords[ind + 1, :] = coords[ind, :] + meters * directions[direction]
 
     coords = coords - np.tile(np.min(coords, 0), (np.shape(coords)[0], 1))
-    dig_plan = np.full(np.max(coords, 0) + np.array([1, 1]), dtype=bool, fill_value=False)
-    row, col = coords[0, 0], coords[0, 1]
-    dig_plan[row, col] = True
-    # print(coords)
+    if include_grid:
+        dig_plan = np.full(np.max(coords, 0) + np.array([1, 1]), dtype=bool, fill_value=False)
+        row, col = coords[0, 0], coords[0, 1]
+        dig_plan[row, col] = True
+        # print(coords)
 
-    for ind, line in enumerate(lines):
-        direction, meters = line[0], int(line[1])
-        match direction:
-            case "R":
-                for i in range(1, meters + 1):
-                    dig_plan[row, col + i] = True
-            case "L":
-                for i in range(1, meters + 1):
-                    dig_plan[row, col - i] = True
-            case "U":
-                for i in range(1, meters + 1):
-                    dig_plan[row - i, col] = True
-            case "D":
-                for i in range(1, meters + 1):
-                    dig_plan[row + i, col] = True
-        row, col = coords[ind + 1, 0], coords[ind + 1, 1]
-    return dig_plan
+        for ind, line in enumerate(lines):
+            direction, meters = line[0], int(line[1])
+            match direction:
+                case "R":
+                    for i in range(1, meters + 1):
+                        dig_plan[row, col + i] = True
+                case "L":
+                    for i in range(1, meters + 1):
+                        dig_plan[row, col - i] = True
+                case "U":
+                    for i in range(1, meters + 1):
+                        dig_plan[row - i, col] = True
+                case "D":
+                    for i in range(1, meters + 1):
+                        dig_plan[row + i, col] = True
+            row, col = coords[ind + 1, 0], coords[ind + 1, 1]
+        return dig_plan, coords
+    return coords
 # print(dig_plan)
 # print(np.transpose(dig_plan[1:-1, :]))
 
 
 def task1():
-    dig_plan = create_grid()
+    lines = get_input(False)
+    dig_plan, _ = create_grid(lines)
     print(dig_plan)
     plt.figure()
     plt.imshow(dig_plan, cmap=plt.cm.gray)
@@ -103,5 +111,20 @@ def task1():
     plt.show()
 
 
+def task2():
+    dirs = {0: "R", 1: "D", 2: "L", 3: "U"}
+    lines = get_input(False)
+    hex_lines = [(dirs[int(line[2][-2])], int(line[2][2:-2], 16)) for line in lines]
+    coords = create_grid(hex_lines)
+    dig_plan, _ = create_grid(lines, True)
+    # dig_plan[coords[0, 0], [coords[0, 1]]] = False
+    print(coords)
+    plt.figure()
+    plt.imshow(dig_plan, cmap=plt.cm.gray)
+    plt.show()
+    print("")
+
+
 if __name__ == "__main__":
-    task1()
+    # task1()
+    task2()
